@@ -3,7 +3,7 @@ const root = document.documentElement.style;
 const modetext = document.querySelector("#mode-text");
 const modeicon = document.querySelector("#mode-icon");
 const input = document.querySelector("#input");
-const noresults = document.querySelector("#noresults");
+const noresults = document.querySelector("#no-results");
 const submit = document.querySelector("#submit");
 // const avatar = document.querySelector("#avatar");
 // const name = document.querySelector("#name");
@@ -17,6 +17,7 @@ const submit = document.querySelector("#submit");
 // const page = document.querySelector("#page");
 // const twitter = document.querySelector("#twitter");
 // const company = document.querySelector("#company");
+const url = "https://api.github.com/users/";
 
 let darkMode = false;
 
@@ -29,7 +30,36 @@ btnmode.addEventListener("click", function () {
     }
 });
 
+submit.addEventListener("click", function (){
+  if (input.value !== ""){
+    getUserData(url + input.value);
+  }
+}
+)
 
+input.addEventListener( "keydown", function(e){
+  if(e.key == "Enter"){
+    if (input.value !== ""){
+      getUserData(url + input.value);
+    }
+  }
+});
+
+input.addEventListener("input", function () {
+  noresults.style.display = "none";
+});
+
+function getUserData(gitUrl) {
+  fetch(gitUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      updateProfile(data);
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
 
 function darkModeProperties() {
   root.setProperty("--lm-bg", "#141D2F");
